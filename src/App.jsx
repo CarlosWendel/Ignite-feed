@@ -1,10 +1,13 @@
 
 import { useState } from 'react'
-import './global.css';
+
 import { Header } from './componets/Header';
-import { Post } from './Post.jsx';
-import styles from './App.module.css';
+import { Post } from './componets/Post.jsx';
 import { Sidebar } from './componets/Sidebar.jsx';
+
+import './global.css';
+import styles from './App.module.css';
+
 
 
 
