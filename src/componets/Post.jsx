@@ -30,6 +30,15 @@ export function Post(props) {
         setNewCommentText(event.target.value)
     }
 
+    function deleteComment(commentToDelete){
+        //imutabilidade -> as variavéis não sofrem mutações, nós criamos um novo espaço na memória.
+
+        const  commentsWithoutDeletedOne = comments.filter( comment=>{
+            return comment != commentToDelete;
+        })
+        
+        setComments(commentsWithoutDeletedOne);
+    }
     return (
         <article className={styles.post}>
             <header>
@@ -75,7 +84,7 @@ export function Post(props) {
             </form>
             <div className={styles.commentList}>
                 {comments.map(comment=>{
-                    return <Comment  key={comment} content={comment}/>
+                    return <Comment  key={comment} content={comment} onDeleteComment={deleteComment}/>
                 })}
             </div>
         </article>
