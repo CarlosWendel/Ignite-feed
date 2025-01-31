@@ -2,23 +2,40 @@ import { format, formatDistanceToNow } from 'date-fns';
 import styles from './Post.module.css';
 import { Comment } from './Comment';
 import { Avatar } from './Avatar';
-import { useState } from 'react';
+import { FormEvent, useState,ChangeEvent, InvalidEvent} from 'react';
+
+interface Author{
+    name:string;
+    role:string;
+    avatarUrl:string;
+}
+
+export interface PostProps{
+   key?:number;
+   author:Author;
+   publishedAt:Date;
+   content:Content[];
+}
+interface Content{
+    type:'paragraph' | 'link';
+    content:string;
+}
 
 
-export function Post(props) {
+export function Post({author,publishedAt,content}:PostProps) {
     const [comments,setComments] = useState([
        'Very cool post, huh? '
     ])
 
     const [newCommentText, setNewCommentText] = useState('')
 
-    const publishedDateFormated = format(props.publishedAt, "dd 'de' LLLL 'às' HH:mm'h'")
-    const publishedDateRelativeToNow = formatDistanceToNow(props.publishedAt, {
+    const publishedDateFormated = format(publishedAt, "dd 'de' LLLL 'às' HH:mm'h'")
+    const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
         addSuffix: true
     })
 
-    function handleCreateNewComment(){
-        event.preventDefault()
+    function handleCreateNewComment(event:FormEvent){
+        event.preventDefault();
 
         
         setComments([...comments, newCommentText ]);
@@ -26,14 +43,14 @@ export function Post(props) {
        
     }
 
-    function handleNewCommentChanger(){
+    function handleNewCommentChanger(event: ChangeEvent<HTMLTextAreaElement>){
         setNewCommentText(event.target.value)
     }
-    function handleNewCommentInvalid(){
+    function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
         event.target.setCustomValidity('Esse campo é obrigatório')
     }
 
-    function deleteComment(commentToDelete){
+    function deleteComment(commentToDelete:string){
         //imutabilidade -> as variavéis não sofrem mutações, nós criamos um novo espaço na memória.
 
         const  commentsWithoutDeletedOne = comments.filter( comment=>{
@@ -47,25 +64,25 @@ export function Post(props) {
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar hasBorder={true} src={props.author.avatarUrl} />
+                    <Avatar src={author.avatarUrl} />
                     <div className={styles.authorInfo}>
                         <strong>
-                            {props.author.name}
+                            {author.name}
                         </strong>
                         <span>
-                            {props.author.role}
+                            {author.role}
                         </span>
                     </div>
                 </div>
-                <time title={publishedDateFormated} dateTime={props.publishedAt.toISOString()}>
+                <time title={publishedDateFormated} dateTime={publishedAt.toISOString()}>
                     {publishedDateRelativeToNow}
                 </time>
             </header>
             <div className={styles.content}>
-                {props.content.map(line => {
-                    if (line.type == 'paragraph') {
+                {content.map(line => {
+                    if (line.type === 'paragraph') {
                         return <p key={line.content}>{line.content}</p>
-                    } else if (line.type == 'link') {
+                    } else if (line.type === 'link') {
                         return <p key={line.content}><a href="">{line.content}</a></p>
                     }
                 })}

@@ -1,18 +1,21 @@
 
-import { useState } from 'react'
+//import { useState } from 'react'
 
-import { Header } from './componets/Header';
-import { Post } from './componets/Post.jsx';
-import { Sidebar } from './componets/Sidebar.jsx';
+import { Header } from './componets/Header.js';
+import { Post } from './componets/Post.js';
+import { Sidebar } from './componets/Sidebar.js';
+import { PostProps } from "./componets/Post"; 
+
+
 
 import './global.css';
 import styles from './App.module.css';
 
 
 
-const posts = [
+const posts: PostProps[] = [
   {
-    id: 1,
+    key: 1,
     author: {
       avatarUrl: 'https://github.com/CarlosWendel.png',
       name: 'Carlos Wendel',
@@ -27,7 +30,7 @@ const posts = [
 
   },
   {
-    id: 2,
+    key: 2,
     author: {
       avatarUrl: 'https://github.com/Torres-TI.png',
       name: 'Pedro Bastos',
@@ -44,7 +47,7 @@ const posts = [
 ];
 
 export function App() {
-  const [count, setCount] = useState(0)
+  //const [count, setCount] = useState(0)
 
   return (
     <div>
@@ -53,10 +56,10 @@ export function App() {
       <div className={styles.wrapper}>
         <Sidebar />
         <main>
-          {posts.map(post => {
+          {posts.map(post=> {
             return (
             <Post 
-              key={post.id}
+              key={post.key}
               author={post.author}
               content={post.content}
               publishedAt={post.publishedAt}
